@@ -6,7 +6,7 @@
 /*   By: jdreissi <jdreissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:31:07 by jdreissi          #+#    #+#             */
-/*   Updated: 2025/11/10 16:14:38 by jdreissi         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:03:39 by jdreissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char	*ft_fill_buffer(char *result, char *buffer, int fd)
 				}
 				return (result);
 			}
-			while(check < BUFFER_SIZE)
+			while (check < BUFFER_SIZE)
 			{
 				buffer[check] = '\0';
 				check++;
