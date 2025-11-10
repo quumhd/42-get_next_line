@@ -6,11 +6,12 @@
 /*   By: jdreissi <jdreissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:31:07 by jdreissi          #+#    #+#             */
-/*   Updated: 2025/11/09 16:19:46 by jdreissi         ###   ########.fr       */
+/*   Updated: 2025/11/10 16:14:38 by jdreissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 size_t	ft_strlen(const char *s)
 {
@@ -48,53 +49,96 @@ char	*ft_strdup(const char *s)
 	return (duplicated);
 }
 
-char	*ft_together(const char *ini, const char *cat)
+char	*ft_together(const char *ini, const char *cat, size_t catlen)
 {
-	int		i;
-	int		j;
-	char	*new;
+	size_t	i;
+	size_t	j;
 	size_t	len;
+	char	*new;
 
-	i = -1;
+	i = 0;
 	j = 0;
-	len = ft_strlen(ini) + ft_strlen(cat);
-	new = malloc(len + 1);
-	if(!new)
+	len = ft_strlen(ini) + catlen;
+	new = malloc(len + 1 * sizeof(char));
+	if (!new)
 		return (NULL);
-	new[len] = '\0';
-	while (ini[++i])
+	while (ini[i])
+	{
 		new[i] = ini[i];
-	while (cat[j])
-		new[i++] = cat[j++];
-	new[i] = '\0';
+		i++;
+	}
+	while (cat[j] && j < catlen)
+	{
+		new[i] = cat[j];
+		i++;
+		j++;
+	}
 	free((void *)ini);
-	return new;
+	new[len] = '\0';
+	return (new);
 }
 
-char	*ft_fill_buffer(char *result, char *buffer, int fd, int i)
+char	*ft_fill_buffer(char *result, char *buffer, int fd)
 {
+	int	i;
 	int	check;
 
-	while (buffer[i++] != '\n')
+	i = 0;
+	if (buffer[0] == '\0')
 	{
-		if (i == BUFFER_SIZE)
+		check = read(fd, buffer, BUFFER_SIZE);
+		if (check == -1 || check == 0)
+			return (NULL);
+	}
+	while (buffer[i] != '\n')
+	{
+		if (buffer[i] == '\0')
 		{
 			if (!result)
 				result = ft_strdup(buffer);
 			else
-				result = ft_together(result, buffer);
+				result = ft_together(result, buffer, i);
 			if (!result)
 				return (NULL);
+			check = read(fd, buffer, BUFFER_SIZE);
+			if (check == 0)
+			{
+				i = 0;
+				while (i < BUFFER_SIZE)
+				{
+					buffer[i] = '\0';
+					i++;
+				}
+				return (result);
+			}
+			while(check < BUFFER_SIZE)
+			{
+				buffer[check] = '\0';
+				check++;
+			}
 			i = -1;
-			while (++i < BUFFER_SIZE)
-				buffer[i] = '\0';
-			i = 0;
 		}
-		check = read(fd, &buffer[i], 1);
-		if (check == -1)
+		i++;
+	}
+	if (!result)
+	{
+		result = malloc(i + 1 + 1 * sizeof(char));
+		if (!result)
 			return (NULL);
-		if (check == 0)
-			break ;
+		ft_strlcpy(result, buffer, i + 1 + 1);
+	}
+	else
+	{
+		result = ft_together(result, buffer, i + 1);
+		if (!result)
+			return (NULL);
+	}
+	ft_strlcpy(buffer, &buffer[i + 1], BUFFER_SIZE - i);
+	i = BUFFER_SIZE - i;
+	while (i <= BUFFER_SIZE)
+	{
+		buffer[i] = '\0';
+		i++;
 	}
 	return (result);
 }
