@@ -6,7 +6,7 @@
 /*   By: jdreissi <jdreissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:31:07 by jdreissi          #+#    #+#             */
-/*   Updated: 2025/11/13 15:50:58 by jdreissi         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:57:43 by jdreissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*ft_together(const char *ini, const char *cat, size_t catlen)
 	len = ft_strlen(ini) + catlen;
 	new = malloc(len + 1 * sizeof(char));
 	if (!new)
-		return (NULL);
+		return (free((void *)ini), NULL);
 	while (ini[i])
 	{
 		new[i] = ini[i];

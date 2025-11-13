@@ -6,7 +6,7 @@
 /*   By: jdreissi <jdreissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:34:04 by jdreissi          #+#    #+#             */
-/*   Updated: 2025/11/13 15:51:23 by jdreissi         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:08:17 by jdreissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,23 +83,26 @@ char	*get_next_line(int fd)
 		return (clear_buffer(buffer));
 	result = ft_fill_buffer(result, buffer, fd, i);
 	if (!result)
-		return (NULL);
+	{
+		free(result);
+		return (free(result), NULL);
+	}
 	return (result);
 }
-// int	main(void)
-// {
-// 	char	*output;
-// 	int		fd = open("read_error.txt", O_RDONLY);
-// 	output = get_next_line(fd);
-// 	printf("1:	%s", output);
-// 	free(output);
-// 	close (fd);
-// 	output = get_next_line(764);
-// 	printf("invalid:	%s", output);
-// 	free(output);
-// 	fd = open("read_error.txt", O_RDONLY);
-// 	output = get_next_line(fd);
-// 	printf("1:	%s", output);
-// 	free(output);
-// 	close(fd);
-// }
+int	main(void)
+{
+	char	*output;
+	int		fd = open("giant_line.txt", O_RDONLY);
+	output = get_next_line(fd);
+	printf("1:	%s", output);
+	free(output);
+	close (fd);
+	output = get_next_line(764);
+	printf("invalid:	%s", output);
+	free(output);
+	fd = open("giant_line.txt", O_RDONLY);
+	output = get_next_line(fd);
+	printf("1:	%s", output);
+	free(output);
+	close(fd);
+}
