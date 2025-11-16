@@ -6,12 +6,23 @@
 /*   By: jdreissi <jdreissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 12:34:04 by jdreissi          #+#    #+#             */
-/*   Updated: 2025/11/13 17:21:38 by jdreissi         ###   ########.fr       */
+/*   Updated: 2025/11/16 15:16:41 by jdreissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
+
+int	fill_empty_buffer(int fd, char *buffer)
+{
+	int	check;
+
+	check = 1;
+	if (buffer[0] == '\0')
+	{
+		check = read(fd, buffer, BUFFER_SIZE);
+	}
+	return (check);
+}
 
 char	*add_last(char *result, char *buffer, int i)
 {
@@ -24,7 +35,7 @@ char	*add_last(char *result, char *buffer, int i)
 	}
 	else
 	{
-		result = ft_together(result, buffer, i + 1);
+		result = join_free(result, buffer, i + 1);
 		if (!result)
 			return (NULL);
 	}
@@ -35,7 +46,7 @@ char	*add_last(char *result, char *buffer, int i)
 	return (result);
 }
 
-char	*ft_fill_buffer(char *result, char *buffer, int fd, int i)
+char	*read_until_newline(char *result, char *buffer, int fd, int i)
 {
 	int	check;
 
@@ -46,7 +57,7 @@ char	*ft_fill_buffer(char *result, char *buffer, int fd, int i)
 			if (!result)
 				result = ft_strdup(buffer);
 			else
-				result = ft_together(result, buffer, i);
+				result = join_free(result, buffer, i);
 			if (!result)
 				return (NULL);
 			check = read(fd, buffer, BUFFER_SIZE);
@@ -66,29 +77,18 @@ char	*ft_fill_buffer(char *result, char *buffer, int fd, int i)
 
 char	*get_next_line(int fd)
 {
-	int			i;
-	int			check;
 	char		*result;
 	static char	buffer[BUFFER_SIZE + 1];
 
-	i = -1;
 	result = NULL;
-	if (buffer[0] == '\0')
-	{
-		check = read(fd, buffer, BUFFER_SIZE);
-		if (check == -1 || check == 0)
-			return (clear_buffer(buffer));
-	}
-	if (read (fd, buffer, 0) == -1)
+	if (fill_empty_buffer(fd, buffer) <= 0 || read(fd, 0, 0) == -1)
 		return (clear_buffer(buffer));
-	result = ft_fill_buffer(result, buffer, fd, i);
+	result = read_until_newline(result, buffer, fd, -1);
 	if (!result)
-	{
-		free(result);
 		return (free(result), NULL);
-	}
 	return (result);
 }
+
 // int	main(void)
 // {
 // 	char	*output;

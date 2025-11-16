@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jdreissi <jdreissi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/15 16:45:21 by jdreissi          #+#    #+#             */
-/*   Updated: 2025/11/15 16:47:05 by jdreissi         ###   ########.fr       */
+/*   Created: 2025/10/30 12:31:07 by jdreissi          #+#    #+#             */
+/*   Updated: 2025/11/16 15:04:57 by jdreissi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-#include <stdio.h>
 
 size_t	ft_strlen(const char *s)
 {
@@ -62,7 +61,7 @@ char	*clear_buffer(char *buffer)
 	return (NULL);
 }
 
-char	*ft_together(const char *ini, const char *cat, size_t catlen)
+char	*join_free(const char *ini, const char *cat, size_t catlen)
 {
 	size_t	i;
 	size_t	j;
